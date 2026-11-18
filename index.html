@@ -1,7 +1,7 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Lab Notebook V6</title><style>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Lab Notebook V6.1</title><style>
 :root{font-family:system-ui,'Malgun Gothic',sans-serif;color:#18283b;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #ccd6e3;border-radius:8px;background:white;padding:8px 12px}button:hover{background:#edf3fa}button.primary{background:#205caa;color:white;border-color:#205caa}button:disabled{opacity:.5;cursor:not-allowed}input,select{border:1px solid #cdd6e2;border-radius:8px;padding:9px;max-width:100%}header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:12px 20px;border-bottom:1px solid #dce4ee}header strong{font-size:19px}#status{font-size:12px;color:#5d6b7d;margin-left:auto}.layout{display:grid;grid-template-columns:275px 1fr;min-height:calc(100vh - 65px)}aside{background:#fff;border-right:1px solid #dce4ee;padding:16px;overflow:auto}main{padding:20px;max-width:1100px;width:100%;margin:auto}.toolbar{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}.toolbar button{min-width:35px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.panel{background:white;border:1px solid #dce4ee;border-radius:12px;padding:16px;margin-bottom:14px}.folder,.file{display:block;width:100%;text-align:left;border:0;padding:10px;background:transparent;overflow-wrap:anywhere}.folder.active,.file.active{background:#e6f0ff}.file{padding-left:20px}.muted{font-size:12px;color:#66768b}.editor{border:1px solid #cbd6e5;border-radius:9px;min-height:360px;padding:18px;outline:none;line-height:1.65;overflow-wrap:anywhere}.editor img{max-width:100%;height:auto}.editor table{border-collapse:collapse;width:100%}.editor td,.editor th{border:1px solid #aebbc9;padding:7px;min-width:50px}.editor:focus{border-color:#205caa}#login{max-width:700px;margin:40px auto}.hidden{display:none!important}#fileList{border-top:1px solid #e4eaf1;margin-top:12px;padding-top:10px}.search{width:100%;margin:6px 0}#title{width:100%;font-size:20px;font-weight:700}#meetingFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}#meetingFields label{font-size:12px;display:flex;flex-direction:column;gap:4px}#meetingFields input{width:100%}#message{font-size:13px;color:#9b3a27;white-space:pre-wrap}.help{font-size:13px;color:#55677e}img{object-fit:contain}@media(max-width:760px){.layout{display:block}aside{border-right:0;border-bottom:1px solid #dce4ee;max-height:300px}main{padding:10px}#meetingFields{grid-template-columns:1fr}header{padding:10px}}
-</style></head><body><header><strong>📒 My Lab Notebook V6.0</strong><span class="muted">Google Drive 연동 연구노트</span><span id="status">연결되지 않음</span><button id="signout" class="hidden">로그아웃</button></header>
-<section id="login" class="panel"><h2>Google Drive 연결</h2><p>이 앱은 Google Drive에 연구노트 전용 폴더를 만들고 노트를 저장합니다.</p><label>Google OAuth 웹 클라이언트 ID<br><input id="clientId" style="width:100%;margin:8px 0" placeholder="xxxxxxxx.apps.googleusercontent.com"></label><div class="row"><button id="connect" class="primary">Google 계정 연결</button><button id="forgetId">클라이언트 ID 지우기</button></div><p class="help">HTTPS 웹주소 또는 localhost에서 실행하세요. Google Cloud의 승인된 JavaScript 원본에 이 앱의 주소를 등록해야 합니다. 이 앱은 Drive의 앱 생성 파일에 대한 권한(drive.file)을 요청합니다.</p><p id="loginError"></p></section>
+</style></head><body><header><strong>📒 My Lab Notebook V6.1</strong><span class="muted">Google Drive 연동 연구노트</span><span id="status">연결되지 않음</span><button id="signout" class="hidden">로그아웃</button></header>
+<section id="login" class="panel"><h2>Google Drive 연결</h2><p>이 앱은 Google Drive에 연구노트 전용 폴더를 만들고 노트를 저장합니다.</p><label>Google OAuth 웹 클라이언트 ID<br><input id="clientId" style="width:100%;margin:8px 0" placeholder="xxxxxxxx.apps.googleusercontent.com"></label><div class="row"><button id="connect" class="primary">Google 계정 연결</button><button id="forgetId">클라이언트 ID 지우기</button></div><p class="help">HTTPS 웹주소 또는 localhost에서 실행하세요. Google Cloud의 승인된 JavaScript 원본에 이 앱의 주소를 등록해야 합니다. 이 앱은 Drive의 앱 생성 파일에 대한 권한(drive.file)을 요청합니다.</p><p id="loginError" role="status" aria-live="polite"></p></section>
 <div id="app" class="layout hidden"><aside><div class="row"><b>내 연구자료</b><button id="refresh" title="새로고침">↻</button></div><button id="newFolder" style="margin-top:10px">+ 폴더 만들기</button><div id="folderList"></div><hr><div class="row"><b>노트</b><button id="newNote">+ 새 노트</button></div><input class="search" id="query" placeholder="단어·샘플번호 검색"><div class="row"><input type="date" id="from" aria-label="시작 날짜" style="width:47%"><input type="date" id="to" aria-label="종료 날짜" style="width:47%"></div><button id="clearSearch" style="margin-top:6px">검색 초기화</button><div id="fileList"></div></aside>
 <main><div class="panel"><div class="row"><input id="title" placeholder="노트 제목"><select id="type"><option value="experiment">실험노트</option><option value="meeting">회의록</option></select><input type="date" id="date"><button id="saveNow" class="primary">지금 저장</button><button id="deleteNote">삭제</button></div><div id="meetingFields" class="hidden"><label>회의 시간<input id="meetingTime" type="time"></label><label>장소<input id="meetingPlace" placeholder="회의 장소"></label><label>참석자<input id="attendees" placeholder="참석자"></label><label>후속 조치 담당자/기한<input id="followup" placeholder="담당자 및 기한"></label></div><div class="toolbar"><button data-cmd="bold"><b>B</b></button><button data-cmd="italic"><i>I</i></button><button data-cmd="underline"><u>U</u></button><button data-cmd="insertUnorderedList">• 목록</button><button data-cmd="insertOrderedList">1. 목록</button><button id="heading">제목</button><button id="insertTable">▦ 표</button><button id="insertImage">🖼 사진 삽입</button><button id="exportHtml">HTML 내보내기</button><button id="print">인쇄/PDF</button></div><input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden"><div id="editor" class="editor" contenteditable="true" aria-label="연구노트 본문"></div><p class="muted">본문에서 커서를 놓은 위치에 사진·표를 삽입할 수 있습니다. 사진은 노트 파일에 포함되며 크기가 큰 사진은 저장 용량 제한에 걸릴 수 있습니다.</p><p id="message"></p></div></main></div>
 <script>
@@ -31,7 +31,40 @@ function insertHtml(html){$('editor').focus();if(selectedRange){const sel=window
 function download(name,content,type){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type}));a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)}
 function googleReady(){return typeof google!=='undefined'&&google.accounts&&google.accounts.oauth2}
 function waitGoogle(){return new Promise((resolve,reject)=>{let count=0;const t=setInterval(()=>{if(googleReady()){clearInterval(t);resolve()}else if(++count>60){clearInterval(t);reject(Error('Google 로그인 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인하세요.'))}},150)})}
-$('connect').onclick=async()=>{try{const id=$('clientId').value.trim();if(!/\.apps\.googleusercontent\.com$/.test(id))throw Error('올바른 Google OAuth 클라이언트 ID를 입력하세요.');localStorage.setItem('labnote_client_id',id);await waitGoogle();tokenClient=google.accounts.oauth2.initTokenClient({client_id:id,scope,callback:async response=>{if(response.error){$('loginError').textContent=response.error;return}token=response.access_token;$('login').classList.add('hidden');$('app').classList.remove('hidden');$('signout').classList.remove('hidden');try{await ensureRoot();await loadFiles();clearEditor()}catch(e){info('연결 후 파일 조회 실패: '+e.message,true)}}});tokenClient.requestAccessToken({prompt:'consent'})}catch(e){$('loginError').textContent=e.message}};
+function loginMessage(message, isError=false){$('loginError').textContent=message;$('loginError').style.color=isError?'#b33333':'#205caa';$('status').textContent=message}
+let authPending=false;
+$('connect').onclick=async()=>{
+ if(authPending)return;
+ try{
+  const id=$('clientId').value.trim();
+  if(!/^[\w-]+\.apps\.googleusercontent\.com$/.test(id))throw Error('올바른 Google OAuth 웹 클라이언트 ID를 입력하세요.');
+  localStorage.setItem('labnote_client_id',id);
+  authPending=true;$('connect').disabled=true;loginMessage('Google 로그인 창을 여는 중...');
+  await waitGoogle();
+  tokenClient=google.accounts.oauth2.initTokenClient({
+   client_id:id,scope,
+   callback:async response=>{
+    authPending=false;$('connect').disabled=false;
+    if(!response || response.error || !response.access_token){
+     loginMessage('Google 인증 실패: '+(response?.error_description||response?.error||'액세스 토큰을 받지 못했습니다.'),true);return;
+    }
+    token=response.access_token;
+    loginMessage('Google 인증 성공. Drive 폴더를 확인하는 중...');
+    $('login').classList.add('hidden');$('app').classList.remove('hidden');$('signout').classList.remove('hidden');
+    try{await ensureRoot();await loadFiles();clearEditor()}
+    catch(e){info('Google 인증은 성공했지만 Drive 파일 조회에 실패했습니다: '+e.message,true);console.error('Drive initialization failed',e)}
+   },
+   error_callback:error=>{
+    authPending=false;$('connect').disabled=false;
+    const type=error?.type||'unknown_error';
+    const messages={popup_closed:'Google 로그인 창이 닫혔습니다. 인증을 완료하지 못했다면 다시 시도하세요.',popup_failed_to_open:'로그인 팝업을 열지 못했습니다. Chrome 팝업 차단 설정을 확인하세요.',unknown:'알 수 없는 로그인 오류입니다.'};
+    loginMessage(messages[type]||('Google 로그인 오류: '+type),true);
+    console.error('Google OAuth popup error',error);
+   }
+  });
+  tokenClient.requestAccessToken({prompt:'consent'});
+ }catch(e){authPending=false;$('connect').disabled=false;loginMessage(e.message,true);console.error('Google OAuth initialization error',e)}
+};
 $('signout').onclick=()=>{if(token&&googleReady())google.accounts.oauth2.revoke(token,()=>{});token='';current=null;$('app').classList.add('hidden');$('login').classList.remove('hidden');$('signout').classList.add('hidden');$('status').textContent='로그아웃됨'};
 $('forgetId').onclick=()=>{localStorage.removeItem('labnote_client_id');$('clientId').value=''};$('clientId').value=localStorage.getItem('labnote_client_id')||'';
 $('refresh').onclick=async()=>{if(dirty)await saveCurrent();if(dirty)return;try{await loadFiles()}catch(e){info(e.message,true)}};
